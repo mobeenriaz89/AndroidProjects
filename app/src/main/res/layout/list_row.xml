@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/pImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="8dp"
+        />
+    <TextView
+        android:id="@+id/pTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lg g2"
+        android:layout_alignTop="@+id/pImage"
+        android:layout_toRightOf="@+id/pImage"
+        android:textSize="@dimen/list_product_title"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/pPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/list_product_price"
+
+        android:text="Rs.200"/>
+
+</RelativeLayout>

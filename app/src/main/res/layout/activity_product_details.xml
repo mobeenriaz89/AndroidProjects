@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_product_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   android:orientation="vertical"
+    tools:context="com.mubeen.vanesa.activites.ProductDetails">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                android:id="@+id/product_details_image"
+                android:src="@drawable/meal1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/product_details_price"
+                android:text="Rs.500.00"
+                android:textAlignment="center">
+            </TextView>
+            <TextView
+                android:id="@+id/product_details_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is sklfjdklsf kldfjk ljdsfdskj dfjk dsfa kjsdf lksdf lkjs asdfj asdf kdjsfkjsdfl sdf l;ksdaf lk; df ;kjdfiopjudsf jkosdflkj sdfkljdskl fj kljf lsdfjifsd ">
+            </TextView>
+    </LinearLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_input_add"
+            app:backgroundTint="?attr/actionMenuTextColor"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/addtocart"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+
+             />
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_input_get"
+            app:backgroundTint="?attr/actionMenuTextColor"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/gotocart"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+
+            />
+    </RelativeLayout>
+
+</FrameLayout>
