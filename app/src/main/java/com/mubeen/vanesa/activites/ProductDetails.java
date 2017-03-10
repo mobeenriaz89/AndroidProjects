@@ -10,28 +10,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mubeen.vanesa.Classes.Cart;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.fragments.HomeFragment;
+import com.mubeen.vanesa.fragments.ItemFragment;
+import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 import java.util.ArrayList;
 
-public class ProductDetails extends AppCompatActivity {
+public class ProductDetails extends AppCompatActivity{
 
 
     ImageView productImage;
     TextView productPrice;
     TextView productDescription;
     FloatingActionButton addTocart,gotocart;
-    Cart userCart;
+    CartSharedPrefferences userCart;
     public static ArrayList<Product> cartList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
         int productid = getIntent().getExtras().getInt("pid");
-        final Product product = HomeFragment.productsArrayList.get(productid-1);
+        final Product product = ItemFragment.productArrayList.get(productid-1);
         double productPriceDouble = product.getProductPrice();
         productImage= (ImageView)findViewById(R.id.product_details_image);
         productPrice = (TextView)findViewById(R.id.product_details_price);
@@ -48,9 +48,10 @@ public class ProductDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(userCart == null) {
-                    userCart = new Cart();
+                    userCart = new CartSharedPrefferences();
                 }
-                if(userCart.addProductToCart(product)) {
+                if(userCart.addProductToCart(getApplicationContext(),product)) {
+                    new CartSharedPrefferences().updatecartAmount(getApplicationContext(),product,true);
                     Snackbar.make(v, "Product Added to cart", Snackbar.LENGTH_SHORT).show();
                 }else{
                     Snackbar.make(v, "Product already exist in cart", Snackbar.LENGTH_SHORT).show();

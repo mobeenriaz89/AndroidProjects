@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,24 +14,23 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
+import com.mubeen.vanesa.activites.ShoppingCart;
+import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 import java.util.ArrayList;
 
-/**
- * Created by mubeen on 24/02/2017.
- */
 
-public class ProductsCustomList extends BaseAdapter {
+
+
+public class CustomCartListAdapter extends BaseAdapter {
 
     private Activity activity;
     private LayoutInflater inflater;
-    private Context mContext;
     private ArrayList<Product>  productsList;
 
 
-    public ProductsCustomList(Activity activity, Context mContext, ArrayList<Product> productsList) {
+    public CustomCartListAdapter(Activity activity, ArrayList<Product> productsList) {
         this.activity = activity;
-        this.mContext = mContext;
         this.productsList = productsList;
     }
 
@@ -63,13 +63,28 @@ public class ProductsCustomList extends BaseAdapter {
         ImageView productThumbnail = (ImageView) convertView.findViewById(R.id.pImage);
         TextView productName = (TextView) convertView.findViewById(R.id.pTitle);
         TextView productPrice = (TextView) convertView.findViewById(R.id.pPrice);
+        ImageButton deleteProduct = (ImageButton) convertView.findViewById(R.id.pDelete);
+        if(deleteProduct.getVisibility() == View.GONE){
+            deleteProduct.setVisibility(View.VISIBLE);
+        }
 
-        Product p = productsList.get(position);
+
+        final Product p = productsList.get(position);
         productName.setText(p.getProductName());
         Double productprice =p.getProductPrice();
         productPrice.setText(productprice.toString());
-
-        Glide.with(mContext).
+        deleteProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CartSharedPrefferences().deleteProductFromCart(activity,p);
+                productsList.clear();
+                productsList = new CartSharedPrefferences().getCartProducts(activity);
+               notifyDataSetChanged();
+                //float amount = new CartSharedPrefferences().updatecartAmount(activity,p,false);
+                //ShoppingCart.totalAmount.setText(String.valueOf(amount));
+            }
+        });
+        Glide.with(activity).
                 load(p.getProductImageURL()).
                 thumbnail(0.5f).crossFade().
                 diskCacheStrategy(DiskCacheStrategy.ALL).

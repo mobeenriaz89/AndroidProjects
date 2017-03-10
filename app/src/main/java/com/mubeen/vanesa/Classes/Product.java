@@ -13,7 +13,7 @@ public class Product {
     double productPrice;
     String productImageURL;
     String productDescription;
-    ArrayList<Product> productsArrayList;
+    public static ArrayList<Product> productsArrayList;
 
 
     public String getProductDescription() {
@@ -30,8 +30,8 @@ public class Product {
     }
 
 
-    public int getProductID() {
-        return productID;
+    public String getProductID() {
+        return String.valueOf(productID);
     }
 
     public String getProductName() {

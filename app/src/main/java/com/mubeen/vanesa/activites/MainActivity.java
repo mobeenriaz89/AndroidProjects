@@ -1,7 +1,9 @@
 package com.mubeen.vanesa.activites;
 
-import android.net.Uri;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -17,12 +19,10 @@ import android.view.MenuItem;
 
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.fragments.HomeFragment;
-
-import java.util.ArrayList;
+import com.mubeen.vanesa.fragments.ItemFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,HomeFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener{
 
 
     @Override
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.FragmentContainer,new HomeFragment()).commit();
+        ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
+
     }
 
     @Override
@@ -86,15 +86,20 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
+        }
+        else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -111,8 +116,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
+    @Override
+    public void onListFragmentInteraction(Product item) {
+        Intent i = new Intent(this, ProductDetails.class);
+        i.putExtra("pid",Integer.parseInt(item.getProductID()));
+        startActivity(i);
     }
 }

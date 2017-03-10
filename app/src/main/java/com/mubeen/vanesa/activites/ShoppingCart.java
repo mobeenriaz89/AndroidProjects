@@ -2,20 +2,18 @@ package com.mubeen.vanesa.activites;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mubeen.vanesa.Classes.Cart;
-import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.model.ProductsCustomList;
+import com.mubeen.vanesa.model.CustomCartListAdapter;
+import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 public class ShoppingCart extends AppCompatActivity {
 
-    ListView cartList;
-    TextView totalAmount;
-
+    public static ListView cartList;
+    public static TextView totalAmount;
+    public static CustomCartListAdapter cartlistadapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,18 +21,11 @@ public class ShoppingCart extends AppCompatActivity {
         cartList = (ListView)findViewById(R.id.cartList);
         totalAmount = (TextView) findViewById(R.id.totalamount);
 
-        ProductsCustomList cartlistadapter = new ProductsCustomList(this,this.getApplicationContext(),Cart.cartList);
+        cartlistadapter = new CustomCartListAdapter(this,new CartSharedPrefferences().getCartProducts(this));
         cartList.setAdapter(cartlistadapter);
+        totalAmount.setText(String.valueOf(new CartSharedPrefferences().getCartAmount(this)));
 
-        double Amount = calculateTotalAmount();
-        totalAmount.setText(Double.toString(Amount));
     }
 
-    private double calculateTotalAmount() {
-        double amount = 0;
-        for(int i=0;i<Cart.cartList.size();i++){
-            amount += Cart.cartList.get(i).getProductPrice();
-        }
-        return  amount;
-    }
+
 }
