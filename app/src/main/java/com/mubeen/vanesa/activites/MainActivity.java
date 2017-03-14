@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity
         View count = menu.findItem(R.id.action_cart).getActionView();
         notifCount = (Button) count.findViewById(R.id.notif_count);
         notifCount.setText(String.valueOf(mNotifCount));
-        final Menu m = menu;
         final MenuItem item = menu.findItem(R.id.action_cart);
         item.getActionView().setOnClickListener(new View.OnClickListener() {
             @Override
