@@ -80,8 +80,8 @@ public class CustomCartListAdapter extends BaseAdapter {
                 productsList.clear();
                 productsList = new CartSharedPrefferences().getCartProducts(activity);
                notifyDataSetChanged();
-                //float amount = new CartSharedPrefferences().updatecartAmount(activity,p,false);
-                //ShoppingCart.totalAmount.setText(String.valueOf(amount));
+                float amount = new CartSharedPrefferences().updatecartAmount(activity,p,false);
+                ShoppingCart.totalAmount.setText(String.valueOf(amount));
             }
         });
         Glide.with(activity).

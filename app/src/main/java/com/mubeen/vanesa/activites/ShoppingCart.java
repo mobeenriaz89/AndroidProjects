@@ -9,11 +9,14 @@ import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.model.CustomCartListAdapter;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
 
+import java.util.ArrayList;
+
 public class ShoppingCart extends AppCompatActivity {
 
     public static ListView cartList;
     public static TextView totalAmount;
     public static CustomCartListAdapter cartlistadapter;
+    public static ArrayList cartArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +24,10 @@ public class ShoppingCart extends AppCompatActivity {
         cartList = (ListView)findViewById(R.id.cartList);
         totalAmount = (TextView) findViewById(R.id.totalamount);
 
-        cartlistadapter = new CustomCartListAdapter(this,new CartSharedPrefferences().getCartProducts(this));
+        cartArrayList = new CartSharedPrefferences().getCartProducts(this);
+        if(cartArrayList != null) {
+            cartlistadapter = new CustomCartListAdapter(this, cartArrayList);
+        }
         cartList.setAdapter(cartlistadapter);
         totalAmount.setText(String.valueOf(new CartSharedPrefferences().getCartAmount(this)));
 

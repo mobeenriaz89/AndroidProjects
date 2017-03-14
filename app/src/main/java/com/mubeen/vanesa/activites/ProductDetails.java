@@ -51,6 +51,7 @@ public class ProductDetails extends AppCompatActivity{
                     userCart = new CartSharedPrefferences();
                 }
                 if(userCart.addProductToCart(getApplicationContext(),product)) {
+
                     new CartSharedPrefferences().updatecartAmount(getApplicationContext(),product,true);
                     Snackbar.make(v, "Product Added to cart", Snackbar.LENGTH_SHORT).show();
                 }else{

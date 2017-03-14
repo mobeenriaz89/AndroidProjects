@@ -16,14 +16,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.fragments.ItemFragment;
+import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener{
-
+    static Button notifCount;
+    static int mNotifCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +34,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -68,9 +62,26 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        setNotifCount();
+        View count = menu.findItem(R.id.action_cart).getActionView();
+        notifCount = (Button) count.findViewById(R.id.notif_count);
+        notifCount.setText(String.valueOf(mNotifCount));
+        final Menu m = menu;
+        final MenuItem item = menu.findItem(R.id.action_cart);
+        item.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,ShoppingCart.class);
+                startActivity(i);            }
+        });
         return true;
     }
+    public void setNotifCount(){
 
+        if(new CartSharedPrefferences().getCartProducts(getApplicationContext()) != null)
+        mNotifCount = new CartSharedPrefferences().getCartProducts(getApplicationContext()).size();
+        invalidateOptionsMenu();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -79,7 +90,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_cart) {
+            Intent i = new Intent(MainActivity.this,ShoppingCart.class);
+            startActivity(i);
             return true;
         }
 

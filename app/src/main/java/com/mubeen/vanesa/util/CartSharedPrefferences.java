@@ -26,9 +26,7 @@ public class CartSharedPrefferences {
         return instance;
     }
 
-    public CartSharedPrefferences() {
-        super();
-    }
+
 
     public float updatecartAmount(Context context,Product product,boolean isAdd){
         Float cartAmount = getCartAmount(context);
@@ -39,10 +37,13 @@ public class CartSharedPrefferences {
         if(isAdd) {
             cartAmount += (float) product.getProductPrice();
         }else{
+
             cartAmount -= (float) product.getProductPrice();
 
         }
-        editor.putFloat(CART_AMOUNT, cartAmount);
+        if(cartAmount >= 0) {
+            editor.putFloat(CART_AMOUNT, cartAmount);
+        }
         editor.commit();
         return getCartAmount(context);
     }
