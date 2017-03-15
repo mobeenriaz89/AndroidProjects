@@ -2,18 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@android:style/Widget.ActionButton"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:clickable="true"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-
-
-    <RelativeLayout
-        android:id="@+id/badge_layout3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <RelativeLayout
             android:id="@+id/relative_layout_item_count2"
             android:layout_width="wrap_content"
@@ -36,6 +26,5 @@
             android:textColor="#FFF"
             android:textSize="12sp"
             android:textStyle="bold" />
-    </RelativeLayout>
 
 </RelativeLayout>
