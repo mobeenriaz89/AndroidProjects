@@ -54,16 +54,7 @@
             android:layout_alignParentEnd="true"
 
              />
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_input_get"
-            app:backgroundTint="?attr/actionMenuTextColor"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="15dp"
-            android:id="@+id/gotocart"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
+
 
             />
     </RelativeLayout>

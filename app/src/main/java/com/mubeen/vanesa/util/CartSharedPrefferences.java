@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mubeen.vanesa.Classes.Product;
+import com.mubeen.vanesa.activites.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ public class CartSharedPrefferences {
         if(!Exist(productsList,product)){
             productsList.add(product);
             saveCartProducts(context, productsList);
+
             return true;
         }
         return false;
@@ -122,4 +124,5 @@ public class CartSharedPrefferences {
 
         return false;
     }
+
 }

@@ -1,11 +1,6 @@
 package com.mubeen.vanesa.activites;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
@@ -25,7 +21,8 @@ import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener{
-    static Button notifCount;
+    TextView notifCount;
+
     static int mNotifCount = 0;
 
     @Override
@@ -48,6 +45,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -62,16 +60,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        setNotifCount();
         View count = menu.findItem(R.id.action_cart).getActionView();
-        notifCount = (Button) count.findViewById(R.id.notif_count);
-        notifCount.setText(String.valueOf(mNotifCount));
-        final MenuItem item = menu.findItem(R.id.action_cart);
-        item.getActionView().setOnClickListener(new View.OnClickListener() {
+        Button notifButton = (Button) count.findViewById(R.id.notif_button);
+        notifCount = (TextView) count.findViewById(R.id.notif_text);
+        setNotifCount();
+
+        notifButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,ShoppingCart.class);
-                startActivity(i);            }
+                startActivityForResult(i,1);
+            }
         });
         return true;
     }
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
         if(new CartSharedPrefferences().getCartProducts(getApplicationContext()) != null)
         mNotifCount = new CartSharedPrefferences().getCartProducts(getApplicationContext()).size();
-        invalidateOptionsMenu();
+        notifCount.setText(String.valueOf(mNotifCount));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -133,6 +132,13 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Product item) {
         Intent i = new Intent(this, ProductDetails.class);
         i.putExtra("pid",Integer.parseInt(item.getProductID()));
-        startActivity(i);
+        startActivityForResult(i,1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            setNotifCount();
+
+
     }
 }
