@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity
             ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
         }
         else if (id == R.id.nav_gallery) {
+            Intent i = new Intent(MainActivity.this,LoginActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_slideshow) {
 
