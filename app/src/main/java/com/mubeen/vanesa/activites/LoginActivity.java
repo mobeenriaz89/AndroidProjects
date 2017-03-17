@@ -49,6 +49,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        session = new SessionManager(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
+
+        if(session.isLoggedin()){
+            Intent i = new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+
         registerButton = (Button) findViewById(R.id.button_login_register);
         loginButton = (Button) findViewById(R.id.button_login_signin);
 
@@ -61,14 +70,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        session = new SessionManager(getApplicationContext());
-        db = new SQLiteHandler(getApplicationContext());
 
-        if(session.isLoggedin()){
-            Intent i = new Intent(LoginActivity.this,MainActivity.class);
-            startActivity(i);
-            finish();
-        }
+
+
     }
 
     @Override
@@ -109,9 +113,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     boolean error = jObj.getBoolean("error");
 
                     if (!error) {
+                        String uid = jObj.getString("uid");
+
                         session.setLogin(true);
 
-                        String uid = jObj.getString("uid");
                         JSONObject user = jObj.getJSONObject("user");
                         String username = user.getString("name");
                         String email = user.getString("email");
@@ -119,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         db.addUserToDB(username, email, uid, created_at);
 
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent i = new Intent(LoginActivity.this, Profile.class);
                         startActivity(i);
                         finish();
                     } else {
@@ -167,5 +172,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         {
             pDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

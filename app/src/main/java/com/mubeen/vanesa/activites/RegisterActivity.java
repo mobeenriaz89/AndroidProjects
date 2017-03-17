@@ -85,8 +85,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.button_register:
                 String fullname = fullnameEditText.getText().toString().trim();
-                String email = fullnameEditText.getText().toString().trim();
-                String password = fullnameEditText.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordTEditText.getText().toString().trim();
                 if(!fullname.isEmpty() && !email.isEmpty() && !password.isEmpty())
                 {
                 registerUser(fullname,email,password);
@@ -120,9 +120,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                                 db.addUserToDB(name, email, uid, created_at);
 
-                                Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Registered Successfully. Please Login now", Toast.LENGTH_SHORT).show();
 
-                                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(i);
                                 finish();
                             } else {

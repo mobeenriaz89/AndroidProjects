@@ -17,14 +17,22 @@ import android.widget.TextView;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.fragments.ItemFragment;
+import com.mubeen.vanesa.helper.SQLiteHandler;
+import com.mubeen.vanesa.helper.SessionManager;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener{
+
+    private static final int REQUESTCODE_UPDATE_CART_COUNTER = 1;
+    private static final int REQUESTCODE_UPDATE_USER_DETAILS = 2;
     TextView notifCount;
-
     static int mNotifCount = 0;
+    TextView nav_username;
+    TextView nav_email;
 
+    SQLiteHandler db;
+    SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +48,35 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        session = new SessionManager(getApplicationContext());
+        View header = navigationView.getHeaderView(0);
+        nav_username = (TextView) header.findViewById(R.id.textView_navheader_username);
+        nav_email = (TextView) header.findViewById(R.id.textView_navheader_email);
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,Profile.class);
+                startActivityForResult(i,REQUESTCODE_UPDATE_USER_DETAILS);
+            }
+        });
+        updateNavHeader();
+
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
 
+    }
+
+    public void updateNavHeader() {
+
+        if(session.isLoggedin()){
+            db = new SQLiteHandler(getApplicationContext());
+            nav_username.setText(db.getuserDetails().get("name"));
+            nav_email.setText(db.getuserDetails().get("email"));
+        }else{
+            nav_username.setText("Sign In | Join Free");
+            nav_email.setText("");
+        }
     }
 
 
@@ -63,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         View count = menu.findItem(R.id.action_cart).getActionView();
         Button notifButton = (Button) count.findViewById(R.id.notif_button);
         notifCount = (TextView) count.findViewById(R.id.notif_text);
-        setNotifCount();
+        updateNotifCount();
 
         notifButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         });
         return true;
     }
-    public void setNotifCount(){
+    public void updateNotifCount(){
 
         if(new CartSharedPrefferences().getCartProducts(getApplicationContext()) != null)
         mNotifCount = new CartSharedPrefferences().getCartProducts(getApplicationContext()).size();
@@ -106,12 +140,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
         }
-        else if (id == R.id.nav_gallery) {
-            Intent i = new Intent(MainActivity.this,LoginActivity.class);
-            startActivity(i);
+        else if (id == R.id.nav_profile) {
+            Intent i = new Intent(MainActivity.this,Profile.class);
+            startActivityForResult(i,REQUESTCODE_UPDATE_USER_DETAILS);
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -133,13 +167,18 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Product item) {
         Intent i = new Intent(this, ProductDetails.class);
         i.putExtra("pid",Integer.parseInt(item.getProductID()));
-        startActivityForResult(i,1);
+        startActivityForResult(i,REQUESTCODE_UPDATE_CART_COUNTER);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            setNotifCount();
-
+        if(requestCode == REQUESTCODE_UPDATE_CART_COUNTER) {
+            updateNotifCount();
+        }else if(requestCode == REQUESTCODE_UPDATE_USER_DETAILS){
+            updateNavHeader();
+        }
 
     }
+
+
 }

@@ -19,6 +19,7 @@ public class SessionManager {
     private static final String PREF_NAME = "USERLOGIN";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
 
+
     public SessionManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME,PRIVATE_MODE);
@@ -30,8 +31,9 @@ public class SessionManager {
         editor.putBoolean(KEY_IS_LOGGEDIN,isLoggedin);
         editor.commit();
 
-        Log.d(TAG, "User login session modified");
+        Log.d(TAG, "User with id login session modified");
     }
+
 
     public boolean isLoggedin(){
         return pref.getBoolean(KEY_IS_LOGGEDIN,false);
