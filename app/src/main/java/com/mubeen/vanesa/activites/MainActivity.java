@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity
             nav_username.setText(db.getuserDetails().get("name"));
             nav_email.setText(db.getuserDetails().get("email"));
         }else{
-            nav_username.setText("Sign In | Join Free");
+            nav_username.setText(R.string.nav_header_default_text);
             nav_email.setText("");
         }
     }
@@ -114,24 +114,6 @@ public class MainActivity extends AppCompatActivity
         mNotifCount = new CartSharedPrefferences().getCartProducts(getApplicationContext()).size();
         notifCount.setText(String.valueOf(mNotifCount));
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_cart) {
-           
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

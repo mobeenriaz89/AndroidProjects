@@ -1,7 +1,6 @@
-package com.mubeen.vanesa.fragments;
+package com.mubeen.vanesa.model;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +10,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mubeen.vanesa.Classes.Product;
+
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.activites.MainActivity;
 import com.mubeen.vanesa.fragments.ItemFragment.OnListFragmentInteractionListener;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<Product> mValues;
     private final OnListFragmentInteractionListener mListener;
-    Context mContext;
+    private Context mContext;
     public MyItemRecyclerViewAdapter(List<Product> items, OnListFragmentInteractionListener listener, Context context) {
         mValues = items;
         mListener = listener;
@@ -44,8 +39,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         Glide.with(mContext).load(holder.mItem.getProductImageURL()).into(holder.productImage);
-
-        holder.productPrice.setText(String.valueOf(mValues.get(position).getProductPrice()));
+        Float price =  Float.parseFloat(mValues.get(position).getProductPrice());
+        holder.productPrice.setText("Rs." + String.valueOf(price));
         holder.productName.setText(mValues.get(position).getProductName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -66,12 +61,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final ImageView productImage;
-        public final TextView productName;
-        public final TextView productPrice;
+        private final View mView;
+        private final ImageView productImage;
+        private final TextView productName;
+        private final TextView productPrice;
 
-        public Product mItem;
+        private Product mItem;
 
         public ViewHolder(View view) {
             super(view);

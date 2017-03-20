@@ -1,32 +1,19 @@
 package com.mubeen.vanesa.Classes;
 
-import java.util.ArrayList;
-
-/**
- * Created by mubeen on 24/02/2017.
- */
-
 public class Product {
 
-    int productID;
-    String productName;
-    double productPrice;
-    String productImageURL;
-    String productDescription;
-    public static ArrayList<Product> productsArrayList;
+    private int productID;
+    private String productName;
+    private String productPrice;
+    private String productImageURL;
+    private String productDescription;
 
-
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public Product(int productID, String productName, double productPrice, String productImageURL, String ProductDescription) {
+    public Product(int productID, String productName, String productPrice, String productImageURL, String ProductDescription) {
         this.productID = productID;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productImageURL = productImageURL;
         this.productDescription = ProductDescription;
-
     }
 
 
@@ -38,7 +25,7 @@ public class Product {
         return productName;
     }
 
-    public double getProductPrice() {
+    public String getProductPrice() {
         return productPrice;
     }
 
@@ -46,10 +33,9 @@ public class Product {
         return productImageURL;
     }
 
-    public ArrayList<Product> getProductsArrayList() {
-        return this.productsArrayList;
+    public String getProductDescription() {
+        return productDescription;
     }
-
 
 
 }

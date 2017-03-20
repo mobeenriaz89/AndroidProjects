@@ -1,12 +1,10 @@
 package com.mubeen.vanesa.activites;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +16,6 @@ import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.fragments.ItemFragment;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
-import com.mubeen.vanesa.util.Helper;
 
 import java.util.ArrayList;
 
@@ -42,7 +39,6 @@ public class ProductDetails extends AppCompatActivity{
         final Product product = ItemFragment.productArrayList.get(productid-1);
         setTitle(product.getProductName().toUpperCase());
 
-        double productPriceDouble = product.getProductPrice();
         productImage= (ImageView)findViewById(R.id.product_details_image);
         productPrice = (TextView)findViewById(R.id.product_details_price);
         productDescription = (TextView)findViewById(R.id.product_details_detail);
@@ -50,7 +46,8 @@ public class ProductDetails extends AppCompatActivity{
 
         Glide.with(this).load(product.getProductImageURL()).into(productImage);
 
-        productPrice.setText(Double.toString(productPriceDouble));
+        Float price = Float.valueOf(product.getProductPrice());
+        productPrice.setText("Rs." + String.valueOf(price));
         productDescription.setText(product.getProductDescription());
 
         addTocart.setOnClickListener(new View.OnClickListener() {

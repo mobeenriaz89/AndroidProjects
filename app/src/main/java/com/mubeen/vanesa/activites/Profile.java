@@ -53,7 +53,6 @@ public class Profile extends AppCompatActivity implements  View.OnClickListener 
         Intent i = new Intent(Profile.this,LoginActivity.class);
         startActivity(i);
         finish();
-
     }
 
     @Override

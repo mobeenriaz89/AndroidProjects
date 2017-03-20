@@ -12,10 +12,10 @@ public class SessionManager {
 
     private static String TAG = SessionManager.class.getSimpleName();
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    Context _context;
-    int PRIVATE_MODE = 0;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Context _context;
+    private int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "USERLOGIN";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
 

@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -126,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 startActivity(i);
                                 finish();
                             } else {
-                                String errorMsg = Jobj.getString("error");
+                                String errorMsg = Jobj.getString("error_msg");
                                 Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {

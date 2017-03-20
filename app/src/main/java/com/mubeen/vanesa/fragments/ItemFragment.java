@@ -17,7 +17,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
+import com.mubeen.vanesa.app.AppConfig;
 import com.mubeen.vanesa.app.AppController;
+import com.mubeen.vanesa.model.MyItemRecyclerViewAdapter;
 
 
 import org.json.JSONArray;
@@ -25,9 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.support.design.R.styleable.RecyclerView;
 
 /**
  * A fragment representing a list of Items.
@@ -89,7 +88,7 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            requestJsonData("http://production.technology-architects.com/vanesa/testapi.php");
+            requestJsonData(AppConfig.URL_All_Products);
 
             productsAdapter = new MyItemRecyclerViewAdapter(productArrayList, mListener,getActivity());
 
@@ -111,7 +110,7 @@ public class ItemFragment extends Fragment {
                         JSONObject productOBJ = (JSONObject) jsonArray.get(i);
                         String name = productOBJ.getString("name");
                         int id = Integer.parseInt(productOBJ.getString("id"));
-                        double price = Double.parseDouble(productOBJ.getString("price"));
+                        String price = productOBJ.getString("price");
                         String imgurl = productOBJ.getString("image");
                         String desc = productOBJ.getString("description");
 

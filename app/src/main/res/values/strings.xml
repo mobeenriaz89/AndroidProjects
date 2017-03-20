@@ -26,4 +26,5 @@
     <string name="not_registered">Not a member? Register Now</string>
     <string name="already_registered">Already registered? Sign in</string>
 
+    <string name="nav_header_default_text">Sign in | Join for free</string>
 </resources>

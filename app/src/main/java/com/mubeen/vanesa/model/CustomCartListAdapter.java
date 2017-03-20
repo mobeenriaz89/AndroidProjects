@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.activites.ShoppingCart;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 import java.util.ArrayList;
@@ -24,13 +23,13 @@ import java.util.ArrayList;
 
 public class CustomCartListAdapter extends BaseAdapter {
 
-    private Activity activity;
+    private Activity mactivity;
     private LayoutInflater inflater;
     private ArrayList<Product>  productsList;
 
 
     public CustomCartListAdapter(Activity activity, ArrayList<Product> productsList) {
-        this.activity = activity;
+        this.mactivity = activity;
         this.productsList = productsList;
     }
 
@@ -53,7 +52,7 @@ public class CustomCartListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if(inflater == null){
-        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) mactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
         if(convertView == null){
             convertView = inflater.inflate(R.layout.list_row,null);
@@ -71,20 +70,21 @@ public class CustomCartListAdapter extends BaseAdapter {
 
         final Product p = productsList.get(position);
         productName.setText(p.getProductName());
-        Double productprice =p.getProductPrice();
-        productPrice.setText(productprice.toString());
+        Double productprice = Double.parseDouble(p.getProductPrice());
+        productPrice.setText("Rs." + productprice.toString());
         deleteProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CartSharedPrefferences().deleteProductFromCart(activity,p);
+                new CartSharedPrefferences().deleteProductFromCart(mactivity,p);
                 productsList.clear();
-                productsList = new CartSharedPrefferences().getCartProducts(activity);
-               notifyDataSetChanged();
-                float amount = new CartSharedPrefferences().updatecartAmount(activity,p,false);
-                ShoppingCart.totalAmount.setText(String.valueOf(amount));
+                productsList = new CartSharedPrefferences().getCartProducts(mactivity);
+                notifyDataSetChanged();
+                float amount = new CartSharedPrefferences().updatecartAmount(mactivity,p,false);
+                TextView totalAmount = (TextView) mactivity.findViewById(R.id.totalamount);
+                totalAmount.setText("Rs." + String.valueOf(amount));
             }
         });
-        Glide.with(activity).
+        Glide.with(mactivity).
                 load(p.getProductImageURL()).
                 thumbnail(0.5f).crossFade().
                 diskCacheStrategy(DiskCacheStrategy.ALL).

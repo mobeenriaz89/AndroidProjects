@@ -17,9 +17,9 @@ import java.util.List;
  */
 
 public class CartSharedPrefferences {
-    public static final String PREF_Name = "SHOPPING_CART";
-    public static final String PRODUCTS_LIST = "PRODUCTS_LIST";
-    public static final String CART_AMOUNT = "CART_AMOUNT";
+    private static final String PREF_Name = "SHOPPING_CART";
+    private static final String PRODUCTS_LIST = "PRODUCTS_LIST";
+    private static final String CART_AMOUNT = "CART_AMOUNT";
 
     private static  CartSharedPrefferences instance;
 
@@ -36,10 +36,10 @@ public class CartSharedPrefferences {
         prefs = context.getSharedPreferences(PREF_Name,Context.MODE_PRIVATE);
         editor = prefs.edit();
         if(isAdd) {
-            cartAmount += (float) product.getProductPrice();
+            cartAmount += Float.parseFloat( product.getProductPrice());
         }else{
 
-            cartAmount -= (float) product.getProductPrice();
+            cartAmount -= Float.parseFloat(product.getProductPrice());
 
         }
         if(cartAmount >= 0) {
@@ -93,7 +93,6 @@ public class CartSharedPrefferences {
         if(!Exist(productsList,product)){
             productsList.add(product);
             saveCartProducts(context, productsList);
-
             return true;
         }
         return false;

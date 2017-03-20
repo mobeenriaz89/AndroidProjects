@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 public class ShoppingCart extends AppCompatActivity {
 
-    public static ListView cartList;
-    public static TextView totalAmount;
-    public static CustomCartListAdapter cartlistadapter;
+    ListView cartList;
+    TextView totalAmount;
+    CustomCartListAdapter cartlistadapter;
     public static ArrayList cartArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class ShoppingCart extends AppCompatActivity {
             cartlistadapter = new CustomCartListAdapter(this, cartArrayList);
         }
         cartList.setAdapter(cartlistadapter);
-        totalAmount.setText(String.valueOf(new CartSharedPrefferences().getCartAmount(this)));
+        totalAmount.setText("Rs." + String.valueOf(new CartSharedPrefferences().getCartAmount(this)));
 
     }
 
