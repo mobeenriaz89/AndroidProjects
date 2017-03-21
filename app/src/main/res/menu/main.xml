@@ -1,6 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/item_toggle_list_grid"
+        app:actionLayout = "@layout/toggle_list_grid"
+        android:title="toggle_list_grid"
+        app:showAsAction="always" />
     <item android:id="@+id/action_cart"
         app:actionLayout="@layout/feed_update_count"
         android:title="action_cart"

@@ -10,4 +10,6 @@
     <color name="register_theme">#27292B</color>
     <color name="register_theme_secondary">#A34A6B</color>
     <color name="white">#ffffff</color>
+    <color name="main_container_background">#bababa</color>
+
 </resources>

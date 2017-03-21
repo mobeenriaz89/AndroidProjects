@@ -16,23 +16,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
             <ImageView
                 android:layout_width="320dp"
                 android:layout_height="320dp"
                 android:id="@+id/product_details_image"
-                android:src="@drawable/meal1"/>
+                android:src="@drawable/meal1"
+                android:layout_marginBottom="10dp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/product_details_price"
                 android:text="Rs.500.00"
-                android:textAlignment="center">
+                android:textAlignment="center"
+                android:layout_marginBottom="10dp">
             </TextView>
             <TextView
                 android:id="@+id/product_details_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="This is sklfjdklsf kldfjk ljdsfdskj dfjk dsfa kjsdf lksdf lkjs asdfj asdf kdjsfkjsdfl sdf l;ksdaf lk; df ;kjdfiopjudsf jkosdflkj sdfkljdskl fj kljf lsdfjifsd ">
             </TextView>
     </LinearLayout>

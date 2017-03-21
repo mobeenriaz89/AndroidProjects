@@ -11,10 +11,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mubeen.vanesa.activites.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="@color/main_container_background">
 
   <FrameLayout
-
       android:id="@+id/FragmentContainer"
       android:layout_width="match_parent"
       android:layout_height="match_parent">

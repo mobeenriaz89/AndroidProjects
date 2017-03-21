@@ -18,6 +18,7 @@ public class SessionManager {
     private int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "USERLOGIN";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+    private static final String KEY_PRODUCTS_COLUMN_COUNT = "columncount";
 
 
     public SessionManager(Context context) {
@@ -38,4 +39,14 @@ public class SessionManager {
     public boolean isLoggedin(){
         return pref.getBoolean(KEY_IS_LOGGEDIN,false);
     }
+
+    public void setColumnCount(int count) {
+        editor.putInt(KEY_PRODUCTS_COLUMN_COUNT,count);
+        editor.commit();
+    }
+
+    public int getColumnCount(){
+        return pref.getInt(KEY_PRODUCTS_COLUMN_COUNT,1);
+    }
+
 }

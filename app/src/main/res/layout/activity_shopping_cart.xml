@@ -32,7 +32,7 @@
             android:textSize="20dp"
             android:text="Rs.1000.00"
             android:layout_gravity="center_vertical"
-            android:fontFamily="serif-monospace"/>
+            android:fontFamily="sans-serif"/>
     </LinearLayout>
 
 </FrameLayout>

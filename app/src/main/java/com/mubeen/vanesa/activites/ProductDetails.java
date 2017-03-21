@@ -76,6 +76,7 @@ public class ProductDetails extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.getItem(0).setVisible(false);
         View count = menu.findItem(R.id.action_cart).getActionView();
         Button notifButton = (Button) count.findViewById(R.id.notif_button);
         notifCount = (TextView) count.findViewById(R.id.notif_text);

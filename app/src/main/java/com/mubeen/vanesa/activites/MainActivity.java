@@ -1,6 +1,7 @@
 package com.mubeen.vanesa.activites;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
+import com.mubeen.vanesa.app.AppConfig;
 import com.mubeen.vanesa.fragments.ItemFragment;
 import com.mubeen.vanesa.helper.SQLiteHandler;
 import com.mubeen.vanesa.helper.SessionManager;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity
 
     private static final int REQUESTCODE_UPDATE_CART_COUNTER = 1;
     private static final int REQUESTCODE_UPDATE_USER_DETAILS = 2;
+
+    private static final String TAG_FRAGMENT_HOME = "tag_fragment_home";
+
     TextView notifCount;
     static int mNotifCount = 0;
     TextView nav_username;
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         View count = menu.findItem(R.id.action_cart).getActionView();
+        View view_toggle_list_grid = menu.findItem(R.id.item_toggle_list_grid).getActionView();
+        final Button button_toggle_list_grid = (Button) view_toggle_list_grid.findViewById(R.id.button_toggle_list_grid);
         Button notifButton = (Button) count.findViewById(R.id.notif_button);
         notifCount = (TextView) count.findViewById(R.id.notif_text);
         updateNotifCount();
@@ -104,6 +111,27 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,ShoppingCart.class);
                 startActivityForResult(i,1);
+            }
+        });
+        final int numofcol = session.getColumnCount();
+
+        if(numofcol == 1){
+            button_toggle_list_grid.setBackgroundResource(R.drawable.grid_layout);
+        }else{
+            button_toggle_list_grid.setBackgroundResource(R.drawable.list_layout);
+        }
+        button_toggle_list_grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(numofcol == 1){
+                    button_toggle_list_grid.setBackgroundResource(R.drawable.list_layout);
+                    session.setColumnCount(2);
+                }else{
+                    button_toggle_list_grid.setBackgroundResource(R.drawable.grid_layout);
+                    session.setColumnCount(1);
+                }
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
             }
         });
         return true;
@@ -123,7 +151,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
+            ft.replace(R.id.FragmentContainer,new ItemFragment(),TAG_FRAGMENT_HOME).commit();
         }
         else if (id == R.id.nav_profile) {
             Intent i = new Intent(MainActivity.this,Profile.class);
