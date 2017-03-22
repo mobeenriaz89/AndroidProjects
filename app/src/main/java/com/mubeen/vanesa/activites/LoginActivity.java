@@ -2,6 +2,7 @@ package com.mubeen.vanesa.activites;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,24 +75,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
+        if(AppConfig.isNetworkStatusAvialable(getApplicationContext()) == true) {
+            int id = v.getId();
 
-        switch (id)
-        {
-            case R.id.button_login_signin:
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                if(!email.isEmpty() && !password.isEmpty()){
-                    checkLogin(email,password);
-                }
-                 break;
+            switch (id) {
+                case R.id.button_login_signin:
+                    String email = emailEditText.getText().toString();
+                    String password = passwordEditText.getText().toString();
+                    if (!email.isEmpty() && !password.isEmpty()) {
+                        checkLogin(email, password);
+                    }else {
+                        Snackbar.make(v, "Please fill all fields", Snackbar.LENGTH_SHORT).show();
+                    }
+                    break;
 
-            case R.id.button_login_register:
-                Intent i = new Intent(LoginActivity.this,RegisterActivity.class);
-                startActivity(i);
-                finish();
-                break;
+                case R.id.button_login_register:
+                    Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(i);
+                    finish();
+                    break;
+            }
         }
+            else {
+                Snackbar.make(v, "Please check your Internet Connection", Snackbar.LENGTH_SHORT).show();
+
+            }
+
     }
 
     private void checkLogin(final String email, final String password) {

@@ -73,12 +73,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
+    if(AppConfig.isNetworkStatusAvialable(getApplicationContext()) == true) {
         int id = v.getId();
 
-        switch (id){
+        switch (id) {
             case R.id.button_register_login:
-                Intent i = new Intent(RegisterActivity.this,LoginActivity.class);
+                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
                 break;
@@ -86,14 +86,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String fullname = fullnameEditText.getText().toString().trim();
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordTEditText.getText().toString().trim();
-                if(!fullname.isEmpty() && !email.isEmpty() && !password.isEmpty())
-                {
-                registerUser(fullname,email,password);
-                }else{
-                    Snackbar.make(v,"Please fill all fields", Snackbar.LENGTH_SHORT).show();
+                if (!fullname.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                    registerUser(fullname, email, password);
+                } else {
+                    Snackbar.make(v, "Please fill all fields", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
         }
+    }else {
+        Snackbar.make(v, "Please check your Internet Connection", Snackbar.LENGTH_SHORT).show();
+
+    }
     }
 
     public void registerUser(final String username, final String email, final String password){

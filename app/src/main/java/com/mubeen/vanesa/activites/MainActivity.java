@@ -1,7 +1,10 @@
 package com.mubeen.vanesa.activites;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -13,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     static int mNotifCount = 0;
     TextView nav_username;
     TextView nav_email;
-
+    Button button_retry;
     SQLiteHandler db;
     SessionManager session;
     @Override
@@ -64,12 +69,34 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(i,REQUESTCODE_UPDATE_USER_DETAILS);
             }
         });
-        updateNavHeader();
+        button_retry = (Button) findViewById(R.id.button_retry);
+
+        //detect internet and show the data
+        loadData();
+
+        button_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadData();
+            }
+        });
 
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
 
+    }
+
+    private void loadData() {
+        if(AppConfig.isNetworkStatusAvialable (getApplicationContext())) {
+            button_retry.setVisibility(View.GONE);
+            updateNavHeader();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
+        } else {
+            button_retry.setVisibility(View.VISIBLE);
+            View parentLayout = findViewById(R.id.content_main);
+            Snackbar.make(parentLayout, "Please check your Internet Connection", Snackbar.LENGTH_SHORT).show();
+
+        }
     }
 
     public void updateNavHeader() {
@@ -116,22 +143,21 @@ public class MainActivity extends AppCompatActivity
         final int numofcol = session.getColumnCount();
 
         if(numofcol == 1){
-            button_toggle_list_grid.setBackgroundResource(R.drawable.grid_layout);
+            button_toggle_list_grid.setBackgroundResource(R.drawable.ic_grid_on_white_24dp);
         }else{
-            button_toggle_list_grid.setBackgroundResource(R.drawable.list_layout);
+            button_toggle_list_grid.setBackgroundResource(R.drawable.ic_view_list_white_24dp);
         }
         button_toggle_list_grid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(numofcol == 1){
-                    button_toggle_list_grid.setBackgroundResource(R.drawable.list_layout);
+                    button_toggle_list_grid.setBackgroundResource(R.drawable.ic_view_list_white_24dp);
                     session.setColumnCount(2);
                 }else{
-                    button_toggle_list_grid.setBackgroundResource(R.drawable.grid_layout);
+                    button_toggle_list_grid.setBackgroundResource(R.drawable.ic_grid_on_white_24dp);
                     session.setColumnCount(1);
                 }
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
+                loadData();
             }
         });
         return true;
@@ -145,14 +171,12 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            ft.replace(R.id.FragmentContainer,new ItemFragment(),TAG_FRAGMENT_HOME).commit();
-        }
+            loadData();        }
         else if (id == R.id.nav_profile) {
             Intent i = new Intent(MainActivity.this,Profile.class);
             startActivityForResult(i,REQUESTCODE_UPDATE_USER_DETAILS);
@@ -189,6 +213,8 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+
 
 
 }

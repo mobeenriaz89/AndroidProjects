@@ -13,7 +13,7 @@
                 android:id="@+id/notif_button"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
-                android:background="@drawable/cart" />
+                android:background="@drawable/ic_shopping_cart_white_24dp" />
         </RelativeLayout>
 
         <TextView
