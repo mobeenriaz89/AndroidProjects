@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     TextView nav_username;
     TextView nav_email;
     Button button_retry;
+    View count;
     SQLiteHandler db;
     SessionManager session;
     @Override
@@ -88,10 +89,12 @@ public class MainActivity extends AppCompatActivity
     private void loadData() {
         if(AppConfig.isNetworkStatusAvialable (getApplicationContext())) {
             button_retry.setVisibility(View.GONE);
+            getActionBar().show();
             updateNavHeader();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
         } else {
+            getActionBar().hide();
             button_retry.setVisibility(View.VISIBLE);
             View parentLayout = findViewById(R.id.content_main);
             Snackbar.make(parentLayout, "Please check your Internet Connection", Snackbar.LENGTH_SHORT).show();

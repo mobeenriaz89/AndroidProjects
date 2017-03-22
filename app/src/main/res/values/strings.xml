@@ -27,4 +27,8 @@
     <string name="already_registered">Already registered? Sign in</string>
 
     <string name="nav_header_default_text">Sign in | Join for free</string>
+    
+    <!--Paypal-->
+    <string name="paypal_clientID">AR5n0W81LZsNgZ8IpvJbqt8IH8c1Kos1pqJ4RSdrL_ViVNnnuDMNWtuw4mcnlx2YXOge4oW9py9NvLoU</string>
+    <string name="paypal_Secret">EDVOnJiC18uPY3VGO2nO7mvJK86mXj05Kojs_BmS8tZZtaaTuXyS_vv4g1liSksQ97cqkGq4wanVGipq</string>
 </resources>

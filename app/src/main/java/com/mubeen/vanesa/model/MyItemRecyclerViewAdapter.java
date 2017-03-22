@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mubeen.vanesa.Classes.Product;
 
 import com.mubeen.vanesa.R;
@@ -38,7 +39,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Glide.with(mContext).load(holder.mItem.getProductImageURL()).into(holder.productImage);
+        Glide.with(mContext).load(holder.mItem.getProductImageURL())
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.productImage);
         Float price =  Float.parseFloat(mValues.get(position).getProductPrice());
         holder.productPrice.setText("Rs." + String.valueOf(price));
         holder.productName.setText(mValues.get(position).getProductName());
