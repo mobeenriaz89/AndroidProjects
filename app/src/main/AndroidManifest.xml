@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
@@ -31,7 +30,7 @@
         <activity android:name=".activites.ShoppingCart" />
         <activity android:name=".activites.LoginActivity" />
         <activity android:name=".activites.RegisterActivity" />
-        <activity android:name=".activites.Profile"></activity>
+        <activity android:name=".activites.Profile" />
     </application>
 
 </manifest>

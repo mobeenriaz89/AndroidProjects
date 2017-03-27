@@ -18,13 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
+import com.mubeen.vanesa.activites.LoginActivity;
 import com.mubeen.vanesa.activites.MainActivity;
+import com.mubeen.vanesa.activites.Profile;
 import com.mubeen.vanesa.activites.ShoppingCart;
 import com.mubeen.vanesa.app.AppConfig;
 import com.mubeen.vanesa.app.AppController;
@@ -37,6 +43,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A fragment representing a list of Items.
@@ -147,11 +157,21 @@ public class ItemFragment extends Fragment {
             hidepDialog();
             }
 
-        });
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("catid", "3");
+
+                return params;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(productsRequest);
 
     }
+
 
     private void hidepDialog() {
         if(pDialog.isShowing()){

@@ -17,11 +17,6 @@ import java.util.ArrayList;
 
 public class ShoppingCart extends AppCompatActivity {
 
-    String clientId = getString(R.string.paypal_clientID);
-    String clientSecret = getString(R.string.paypal_Secret);
-
-    APIContext context = new APIContext(clientId, clientSecret, "sandbox");
-
     ListView cartList;
     TextView totalAmount;
     CustomCartListAdapter cartlistadapter;

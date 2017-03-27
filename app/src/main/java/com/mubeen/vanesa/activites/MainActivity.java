@@ -1,11 +1,11 @@
 package com.mubeen.vanesa.activites;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,17 +16,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.app.AppConfig;
+import com.mubeen.vanesa.app.AppController;
 import com.mubeen.vanesa.fragments.ItemFragment;
 import com.mubeen.vanesa.helper.SQLiteHandler;
 import com.mubeen.vanesa.helper.SessionManager;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener{
@@ -35,19 +45,24 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUESTCODE_UPDATE_USER_DETAILS = 2;
 
     private static final String TAG_FRAGMENT_HOME = "tag_fragment_home";
+    ProgressDialog pDialog;
 
     TextView notifCount;
     static int mNotifCount = 0;
     TextView nav_username;
     TextView nav_email;
     Button button_retry;
-    View count;
     SQLiteHandler db;
     SessionManager session;
+    NavigationView navigationView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pDialog = new ProgressDialog(MainActivity.this);
+        pDialog.setMessage("Fetching product categories");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -56,9 +71,10 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().add("Home");
+        navigationView.getMenu().getItem(0).setIcon(R.drawable.ic_home_black_24dp);
         session = new SessionManager(getApplicationContext());
         View header = navigationView.getHeaderView(0);
         nav_username = (TextView) header.findViewById(R.id.textView_navheader_username);
@@ -88,13 +104,14 @@ public class MainActivity extends AppCompatActivity
 
     private void loadData() {
         if(AppConfig.isNetworkStatusAvialable (getApplicationContext())) {
+            requestCategoriesFromJson(AppConfig.URL_All_CATEGORIES);
             button_retry.setVisibility(View.GONE);
-            getActionBar().show();
+            getSupportActionBar().show();
             updateNavHeader();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
         } else {
-            getActionBar().hide();
+            getSupportActionBar().hide();
             button_retry.setVisibility(View.VISIBLE);
             View parentLayout = findViewById(R.id.content_main);
             Snackbar.make(parentLayout, "Please check your Internet Connection", Snackbar.LENGTH_SHORT).show();
@@ -177,8 +194,8 @@ public class MainActivity extends AppCompatActivity
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
+        String title = (String) item.getTitle();
+        if (title.equals("Root Catalog")) {
             loadData();        }
         else if (id == R.id.nav_profile) {
             Intent i = new Intent(MainActivity.this,Profile.class);
@@ -200,6 +217,45 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public void requestCategoriesFromJson(String url){
+        showpDialog();
+        navigationView.getMenu().clear();
+        JsonArrayRequest productsRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray jsonArray) {
+                Log.d("response", String.valueOf(jsonArray));
+                for(int i =0; i<jsonArray.length();i++){
+                    try {
+                        JSONObject categoryOBJ = (JSONObject) jsonArray.get(i);
+                        String name = categoryOBJ.getString("name");
+                        navigationView.getMenu().add(name);
+                        SubMenu topChannelMenu = navigationView.getMenu().addSubMenu("Top Channels");
+                        topChannelMenu.add("Foo");
+                        topChannelMenu.add("Bar");
+                        topChannelMenu.add("Baz");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                hidepDialog();
+                navigationView.getMenu().getItem(0).setChecked(true);
+
+            }
+
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("json error:", String.valueOf(volleyError));
+                hidepDialog();
+            }
+
+        });
+
+        AppController.getInstance().addToRequestQueue(productsRequest);
+
+    }
+
     @Override
     public void onListFragmentInteraction(Product item) {
         Intent i = new Intent(this, ProductDetails.class);
@@ -218,6 +274,17 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void hidepDialog() {
+        if(pDialog.isShowing()){
+            pDialog.dismiss();
+        }
+    }
+
+    private void showpDialog(){
+        if(!pDialog.isShowing()){
+            pDialog.show();
+        }
+    }
 
 
 }
