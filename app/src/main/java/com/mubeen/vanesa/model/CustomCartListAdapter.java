@@ -85,8 +85,7 @@ public class CustomCartListAdapter extends BaseAdapter {
             }
         });
         Glide.with(mactivity).
-                load(p.getProductImageURL()).
-                thumbnail(0.5f).crossFade().
+                load(p.getProductImageURL()).crossFade().
                 diskCacheStrategy(DiskCacheStrategy.ALL).
                 into(productThumbnail);
         return convertView;

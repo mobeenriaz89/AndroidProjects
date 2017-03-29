@@ -19,18 +19,31 @@
         <activity
             android:name=".activites.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activites.ProductDetails" />
-        <activity android:name=".activites.ShoppingCart" />
-        <activity android:name=".activites.LoginActivity" />
-        <activity android:name=".activites.RegisterActivity" />
-        <activity android:name=".activites.Profile" />
+        <activity
+            android:parentActivityName=".activites.MainActivity"
+            android:name=".activites.ProductDetails"
+            />
+        <activity
+            android:parentActivityName=".activites.MainActivity"
+            android:name=".activites.ShoppingCart" />
+        <activity
+            android:parentActivityName=".activites.MainActivity"
+            android:name=".activites.LoginActivity" />
+        <activity
+            android:parentActivityName=".activites.LoginActivity"
+            android:name=".activites.RegisterActivity" />
+        <activity
+            android:parentActivityName=".activites.MainActivity"
+            android:name=".activites.Profile" />
     </application>
 
 </manifest>

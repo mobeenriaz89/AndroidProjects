@@ -1,6 +1,8 @@
 package com.mubeen.vanesa.activites;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,7 +33,9 @@ public class ProductDetails extends AppCompatActivity{
     TextView notifCount;
     int mNotifCount;
     Boolean isProductAdded = false;
+    ScrollView detailsScrollView;
     public static ArrayList<Product> cartList = new ArrayList<>();
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,7 @@ public class ProductDetails extends AppCompatActivity{
         String productid = getIntent().getExtras().getString("pid");
         final Product product = ListsHelper.getProductByID(productid);
         setTitle(product.getProductName().toUpperCase());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         productImage= (ImageView)findViewById(R.id.product_details_image);
         productPrice = (TextView)findViewById(R.id.product_details_price);
@@ -68,7 +74,17 @@ public class ProductDetails extends AppCompatActivity{
             }
         });
 
+        detailsScrollView = (ScrollView) findViewById(R.id.productDetails_scrollview);
+        detailsScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > oldScrollY)
+                    addTocart.hide();
+                else if (scrollY < oldScrollY)
+                    addTocart.show();
 
+            }
+        });
 
 
     }

@@ -7,6 +7,10 @@
     <dimen name="list_product_title">17dp</dimen>
     <dimen name="list_product_price">12dip</dimen>
 
+    <!--products detail content dimensions-->
+    <dimen name="detail_product_price">16dip</dimen>
+
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -14,4 +18,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="card_margin">8dp</dimen>
     <dimen name="card_product_radius">8dp</dimen>
+
 </resources>

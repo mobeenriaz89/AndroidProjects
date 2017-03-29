@@ -1,9 +1,11 @@
 package com.mubeen.vanesa.activites;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,8 +46,9 @@ public class ShoppingCart extends AppCompatActivity {
     }
 
     private boolean checkout() {
-        return  false;
-
+        View v = findViewById(R.id.activity_shopping_cart);
+        Snackbar.make(v,"Coming soon :)", Snackbar.LENGTH_SHORT).show();
+        return true;
     }
 
 
