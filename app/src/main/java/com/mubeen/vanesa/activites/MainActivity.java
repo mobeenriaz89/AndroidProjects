@@ -3,9 +3,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,14 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.mubeen.vanesa.helper.ListsHelper;
 import com.mubeen.vanesa.Classes.Product;
+import com.mubeen.vanesa.Classes.ProductCategory;
 import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.app.AppConfig;
 import com.mubeen.vanesa.app.AppController;
@@ -36,7 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener{
@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUESTCODE_UPDATE_CART_COUNTER = 1;
     private static final int REQUESTCODE_UPDATE_USER_DETAILS = 2;
 
-    private static final String TAG_FRAGMENT_HOME = "tag_fragment_home";
     ProgressDialog pDialog;
 
     TextView notifCount;
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     SessionManager session;
     NavigationView navigationView;
 
+    ArrayList<ProductCategory> categoriesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity
         pDialog.setMessage("Fetching product categories");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,8 +72,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().add("Home");
-        navigationView.getMenu().getItem(0).setIcon(R.drawable.ic_home_black_24dp);
         session = new SessionManager(getApplicationContext());
         View header = navigationView.getHeaderView(0);
         nav_username = (TextView) header.findViewById(R.id.textView_navheader_username);
@@ -87,14 +84,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
         button_retry = (Button) findViewById(R.id.button_retry);
-
-        //detect internet and show the data
-        loadData();
+        requestCategoriesFromJson(AppConfig.URL_All_CATEGORIES);
+        loadData(AppConfig.CATEGORY_ID_ROOT_CATALOG);
 
         button_retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadData();
+                loadData(AppConfig.CATEGORY_ID_ROOT_CATALOG);
             }
         });
 
@@ -102,14 +98,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void loadData() {
+    private void loadData(int categoryID) {
         if(AppConfig.isNetworkStatusAvialable (getApplicationContext())) {
-            requestCategoriesFromJson(AppConfig.URL_All_CATEGORIES);
             button_retry.setVisibility(View.GONE);
             getSupportActionBar().show();
             updateNavHeader();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.FragmentContainer,new ItemFragment()).commit();
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConfig.KEY_CATEGORY_ID, categoryID);
+            Fragment frag = new ItemFragment();
+            frag.setArguments(bundle);
+            ft.replace(R.id.FragmentContainer,frag).commit();
         } else {
             getSupportActionBar().hide();
             button_retry.setVisibility(View.VISIBLE);
@@ -177,7 +176,14 @@ public class MainActivity extends AppCompatActivity
                     button_toggle_list_grid.setBackgroundResource(R.drawable.ic_grid_on_white_24dp);
                     session.setColumnCount(1);
                 }
-                loadData();
+
+                for(int i=0;i<navigationView.getMenu().size(); i++) {
+                    if(navigationView.getMenu().getItem(i).isChecked()){
+                        loadData(navigationView.getMenu().getItem(i).getItemId());
+                    }
+                }
+
+
             }
         });
         return true;
@@ -192,23 +198,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // Handle navigation view item clicks here.
+
+
         int id = item.getItemId();
-        String title = (String) item.getTitle();
-        if (title.equals("Root Catalog")) {
-            loadData();        }
-        else if (id == R.id.nav_profile) {
-            Intent i = new Intent(MainActivity.this,Profile.class);
-            startActivityForResult(i,REQUESTCODE_UPDATE_USER_DETAILS);
+        if(!item.isChecked()) {
+            String title = item.toString();
 
-        } else if (id == R.id.nav_slideshow) {
+            setTitle(title);
+            loadData(id);
 
-        } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            int size = navigationView.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigationView.getMenu().getItem(i).setChecked(false);
+            }
+            item.setChecked(true);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -219,20 +223,24 @@ public class MainActivity extends AppCompatActivity
 
     public void requestCategoriesFromJson(String url){
         showpDialog();
+        categoriesList= new ArrayList<>();
         navigationView.getMenu().clear();
         JsonArrayRequest productsRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray jsonArray) {
                 Log.d("response", String.valueOf(jsonArray));
+                String id = "0";
+                String name = "home".toUpperCase();
+                ProductCategory category = new ProductCategory(id,name);
+                ListsHelper.categoryArrayList.add(category);
                 for(int i =0; i<jsonArray.length();i++){
                     try {
                         JSONObject categoryOBJ = (JSONObject) jsonArray.get(i);
-                        String name = categoryOBJ.getString("name");
-                        navigationView.getMenu().add(name);
-                        SubMenu topChannelMenu = navigationView.getMenu().addSubMenu("Top Channels");
-                        topChannelMenu.add("Foo");
-                        topChannelMenu.add("Bar");
-                        topChannelMenu.add("Baz");
+                        id = categoryOBJ.getString("id");
+                        name = categoryOBJ.getString("name").toUpperCase();
+                        category = new ProductCategory(id,name);
+                        ListsHelper.categoryArrayList.add(category);
+                        navigationView.getMenu().add(0,Integer.parseInt(ListsHelper.categoryArrayList.get(i).getCategoryID()),0,ListsHelper.categoryArrayList.get(i).getCategoryName());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -246,12 +254,11 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.d("json error:", String.valueOf(volleyError));
+                Log.d("problem json error:", String.valueOf(volleyError));
                 hidepDialog();
             }
 
         });
-
         AppController.getInstance().addToRequestQueue(productsRequest);
 
     }
@@ -259,7 +266,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Product item) {
         Intent i = new Intent(this, ProductDetails.class);
-        i.putExtra("pid",Integer.parseInt(item.getProductID()));
+        i.putExtra("pid",item.getProductID());
         startActivityForResult(i,REQUESTCODE_UPDATE_CART_COUNTER);
     }
 

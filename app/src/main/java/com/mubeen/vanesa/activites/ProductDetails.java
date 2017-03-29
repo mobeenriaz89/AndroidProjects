@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mubeen.vanesa.helper.ListsHelper;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.fragments.ItemFragment;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class ProductDetails extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
-        int productid = getIntent().getExtras().getInt("pid");
-        final Product product = ItemFragment.productArrayList.get(productid-1);
+        String productid = getIntent().getExtras().getString("pid");
+        final Product product = ListsHelper.getProductByID(productid);
         setTitle(product.getProductName().toUpperCase());
 
         productImage= (ImageView)findViewById(R.id.product_details_image);

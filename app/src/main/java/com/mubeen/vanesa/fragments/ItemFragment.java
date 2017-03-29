@@ -2,36 +2,30 @@ package com.mubeen.vanesa.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.android.volley.AuthFailureError;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+
+
 import com.android.volley.toolbox.StringRequest;
+
+import com.mubeen.vanesa.helper.ListsHelper;
 import com.mubeen.vanesa.Classes.Product;
 import com.mubeen.vanesa.R;
-import com.mubeen.vanesa.activites.LoginActivity;
-import com.mubeen.vanesa.activites.MainActivity;
-import com.mubeen.vanesa.activites.Profile;
-import com.mubeen.vanesa.activites.ShoppingCart;
+
 import com.mubeen.vanesa.app.AppConfig;
 import com.mubeen.vanesa.app.AppController;
 import com.mubeen.vanesa.helper.SessionManager;
@@ -42,11 +36,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * A fragment representing a list of Items.
@@ -58,7 +50,6 @@ public class ItemFragment extends Fragment {
 
     ProgressDialog pDialog;
     RecyclerView recyclerView;
-    public static ArrayList<Product> productArrayList = new ArrayList<>();
     RecyclerView.Adapter productsAdapter;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -113,63 +104,66 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            requestJsonData(AppConfig.URL_All_Products);
 
-            productsAdapter = new MyItemRecyclerViewAdapter(productArrayList, mListener,getActivity());
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+                int i = bundle.getInt(AppConfig.KEY_CATEGORY_ID, AppConfig.CATEGORY_ID_ROOT_CATALOG);
+                MakePostRequest(String.valueOf(i));
+            }
+
+            productsAdapter = new MyItemRecyclerViewAdapter(ListsHelper.productArrayList, mListener,getActivity());
 
             recyclerView.setAdapter(productsAdapter);
         }
         return view;
     }
 
-    public void requestJsonData(String url){
+    void MakePostRequest(final String categoryID) {
         showpDialog();
-        productArrayList.clear();
+        ListsHelper.productArrayList.clear();
 
-        JsonArrayRequest productsRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_All_Products, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONArray jsonArray) {
-                Log.d("response", String.valueOf(jsonArray));
-                for(int i =0; i<jsonArray.length();i++){
-                    try {
-                        JSONObject productOBJ = (JSONObject) jsonArray.get(i);
-                        String name = productOBJ.getString("name");
-                        int id = Integer.parseInt(productOBJ.getString("id"));
-                        String price = productOBJ.getString("price");
-                        String imgurl = productOBJ.getString("image");
-                        String desc = productOBJ.getString("description");
+            public void onResponse(String response) {
+                Log.d("params response" , response);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for(int i =0; i<jsonArray.length();i++){
+                        try {
+                            JSONObject productOBJ = (JSONObject) jsonArray.get(i);
+                            String name = productOBJ.getString("name");
+                            int id = Integer.parseInt(productOBJ.getString("id"));
+                            String price = productOBJ.getString("price");
+                            String imgurl = productOBJ.getString("image");
+                            String desc = productOBJ.getString("description");
 
-                        Product p = new Product(id,name,price,imgurl,desc);
-                        productArrayList.add(p);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            Product p = new Product(id,name,price,imgurl,desc);
+                            ListsHelper.productArrayList.add(p);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    productsAdapter.notifyDataSetChanged();
+                    hidepDialog();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                productsAdapter.notifyDataSetChanged();
-                hidepDialog();
-           }
-
-
+            }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-           Log.d("json error:", String.valueOf(volleyError));
-            hidepDialog();
+
             }
-
         }){
-
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("catid", "3");
-
+                params.put("catid",categoryID);
                 return params;
             }
         };
-
-        AppController.getInstance().addToRequestQueue(productsRequest);
-
+        AppController.getInstance().addToRequestQueue(request);
     }
 
 
@@ -208,5 +202,7 @@ public class ItemFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Product item);
     }
+
+
 
 }

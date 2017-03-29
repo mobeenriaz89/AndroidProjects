@@ -16,6 +16,10 @@ public class AppConfig {
 
     public static final String PAYPAL_CLIENT_ID = "AR5n0W81LZsNgZ8IpvJbqt8IH8c1Kos1pqJ4RSdrL_ViVNnnuDMNWtuw4mcnlx2YXOge4oW9py9NvLoU";
     public static final String PAYPAL_CLIENT_SECRET = "EDVOnJiC18uPY3VGO2nO7mvJK86mXj05Kojs_BmS8tZZtaaTuXyS_vv4g1liSksQ97cqkGq4wanVGipq";
+    public static final int CATEGORY_ID_WOMEN = 3;
+    public static final int CATEGORY_ID_ROOT_CATALOG = 0;
+
+    public static final String KEY_CATEGORY_ID = "categoryid";
 
     public static boolean isNetworkStatusAvialable (Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
