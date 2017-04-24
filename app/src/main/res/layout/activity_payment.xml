@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context="com.mubeen.vanesa.activites.MyPaymentActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment methods"
+        android:textAlignment="center"
+        android:textSize="32sp"/>
+
+    <Button
+        android:id="@+id/paypal_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Paypal"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="231dp"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/textView_totalamount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total amount:$100"
+        android:textAlignment="center"
+        android:textSize="32sp"
+        android:layout_marginTop="330dp"/>
+
+
+</LinearLayout>

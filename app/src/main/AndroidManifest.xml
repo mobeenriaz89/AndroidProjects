@@ -19,9 +19,8 @@
         <activity
             android:name=".activites.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,21 +28,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:parentActivityName=".activites.MainActivity"
             android:name=".activites.ProductDetails"
-            />
+            android:parentActivityName=".activites.MainActivity" />
         <activity
-            android:parentActivityName=".activites.MainActivity"
-            android:name=".activites.ShoppingCart" />
+            android:name=".activites.ShoppingCart"
+            android:parentActivityName=".activites.MainActivity" />
         <activity
-            android:parentActivityName=".activites.MainActivity"
-            android:name=".activites.LoginActivity" />
+            android:name=".activites.LoginActivity"
+            android:parentActivityName=".activites.MainActivity" />
         <activity
-            android:parentActivityName=".activites.LoginActivity"
-            android:name=".activites.RegisterActivity" />
+            android:name=".activites.RegisterActivity"
+            android:parentActivityName=".activites.LoginActivity" />
         <activity
-            android:parentActivityName=".activites.MainActivity"
-            android:name=".activites.Profile" />
+            android:name=".activites.Profile"
+            android:parentActivityName=".activites.MainActivity" />
+        <activity android:name=".activites.MyPaymentActivity"></activity>
     </application>
 
 </manifest>

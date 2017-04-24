@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ProjectVanesa.iml" filepath="$PROJECT_DIR$/ProjectVanesa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProjectVanesaLive.iml" filepath="$PROJECT_DIR$/ProjectVanesaLive.iml" />
       <module fileurl="file://$PROJECT_DIR$/Vanesa.iml" filepath="$PROJECT_DIR$/Vanesa.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

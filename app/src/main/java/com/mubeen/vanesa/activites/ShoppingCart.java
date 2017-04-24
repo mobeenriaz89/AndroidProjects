@@ -1,54 +1,58 @@
 package com.mubeen.vanesa.activites;
 
-import android.support.design.widget.Snackbar;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mubeen.vanesa.R;
 import com.mubeen.vanesa.model.CustomCartListAdapter;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.rest.PayPalRESTException;
 
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class ShoppingCart extends AppCompatActivity {
 
     ListView cartList;
-    TextView totalAmount;
+    TextView totalAmountTextView;
     CustomCartListAdapter cartlistadapter;
     Button checkoutButton;
     public static ArrayList cartArrayList;
+    BigDecimal finalAmount;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
         cartList = (ListView)findViewById(R.id.cartList);
-        totalAmount = (TextView) findViewById(R.id.totalamount);
+        totalAmountTextView = (TextView) findViewById(R.id.totalamount);
         checkoutButton = (Button) findViewById(R.id.button_checkout);
         cartArrayList = new CartSharedPrefferences().getCartProducts(this);
         if(cartArrayList != null) {
             cartlistadapter = new CustomCartListAdapter(this, cartArrayList);
         }
         cartList.setAdapter(cartlistadapter);
-        totalAmount.setText("Rs." + String.valueOf(new CartSharedPrefferences().getCartAmount(this)));
-        checkoutButton.setOnClickListener(new View.OnClickListener() {
+        finalAmount = BigDecimal.valueOf(new CartSharedPrefferences().getCartAmount(this));
+        totalAmountTextView.setText("Rs." + String.valueOf(finalAmount));
+        if(new CartSharedPrefferences().getCartProducts(this).isEmpty()) {
+            checkoutButton.setEnabled(false);
+        }else{
+            checkoutButton.setEnabled(true);
+
+        }
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkout();
+                Intent i = new Intent(ShoppingCart.this,MyPaymentActivity.class);
+                startActivity(i);
             }
         });
-    }
-
-    private boolean checkout() {
-        View v = findViewById(R.id.activity_shopping_cart);
-        Snackbar.make(v,"Coming soon :)", Snackbar.LENGTH_SHORT).show();
-        return true;
     }
 
 

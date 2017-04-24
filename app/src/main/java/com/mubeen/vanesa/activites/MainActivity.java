@@ -31,6 +31,7 @@ import com.mubeen.vanesa.fragments.ItemFragment;
 import com.mubeen.vanesa.helper.SQLiteHandler;
 import com.mubeen.vanesa.helper.SessionManager;
 import com.mubeen.vanesa.util.CartSharedPrefferences;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
 
     ArrayList<ProductCategory> categoriesList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
