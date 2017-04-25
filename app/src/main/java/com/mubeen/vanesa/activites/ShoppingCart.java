@@ -40,7 +40,7 @@ public class ShoppingCart extends AppCompatActivity {
         cartList.setAdapter(cartlistadapter);
         finalAmount = BigDecimal.valueOf(new CartSharedPrefferences().getCartAmount(this));
         totalAmountTextView.setText("Rs." + String.valueOf(finalAmount));
-        if(new CartSharedPrefferences().getCartProducts(this).isEmpty()) {
+        if(cartArrayList.isEmpty()) {
             checkoutButton.setEnabled(false);
         }else{
             checkoutButton.setEnabled(true);
