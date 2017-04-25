@@ -36,13 +36,11 @@ public class MyPaymentActivity extends AppCompatActivity {
         textViewTotalAmount = (TextView) findViewById(R.id.textView_totalamount);
         textViewTotalAmount.setText("SubTotal: $" + finalamount.toString());
         paypalButton = (Button) findViewById(R.id.paypal_payment);
-            paypalButton.setActivated(false);
 
         paypalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     checkout();
-
             }
         });
     }
